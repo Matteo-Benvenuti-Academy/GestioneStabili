@@ -10,4 +10,4 @@ public class GestioneStabiliApplication {
 		SpringApplication.run(GestioneStabiliApplication.class, args);
 	}
 
-}
+} 

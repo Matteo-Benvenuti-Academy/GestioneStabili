@@ -19,7 +19,6 @@ public class CommonholdService {
 	@Autowired
 	CommonholdRepository repository;
 
-	
 	@Autowired
 	ModelMapper mapper;
 	
@@ -70,9 +69,28 @@ public class CommonholdService {
 		return true;
 	}
 
-	public void update(AdministratorDto admin, String uniqueCode) {
+	public boolean update(AdministratorDto admin, CommonholdDto commonholdDto, String uniqueCode) {
 		
+		Commonhold commonhold = repository.findByUniqueCode(uniqueCode);
 		
+		if(commonhold == null || !commonhold.getAdministrator().getUserName().equals(admin.getUserName()))
+			return false;
+
+		commonhold.setName(commonholdDto.getName());
+		commonhold.setCommonholdAddress(commonholdDto.getCommonholdAddress());
+		
+		repository.save(commonhold);
+
+		return true;
 	}
+
+    public CommonholdDto findByUniqueCode(String uniqueCode) {
+        Commonhold commonhold = repository.findByUniqueCode(uniqueCode);
+
+		if(commonhold == null) 
+			return null;
+
+		return mapper.map(commonhold,CommonholdDto.class);
+    }
 	
 }

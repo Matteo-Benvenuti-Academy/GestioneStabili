@@ -40,11 +40,11 @@ public class AdministratorDto {
 		this.pass = pass;
 	}
 
-	public List<Commonhold> getsetCommonholdListList() {
+	public List<Commonhold> getCommonholdList() {
 		return commonholdList;
 	}
 
-	public void setCommonholdListList(List<Commonhold> commonholdList) {
+	public void setCommonholdList(List<Commonhold> commonholdList) {
 		this.commonholdList = commonholdList;
 	}
 }

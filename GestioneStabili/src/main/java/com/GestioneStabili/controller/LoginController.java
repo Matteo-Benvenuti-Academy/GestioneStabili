@@ -12,7 +12,6 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import com.GestioneStabili.dto.AdministratorDto;
 import com.GestioneStabili.dto.ApartmentDto;
 import com.GestioneStabili.dto.LoginDataDto;
-import com.GestioneStabili.models.Administrator;
 import com.GestioneStabili.services.AdministratorService;
 import com.GestioneStabili.services.ApartmentService;
 
@@ -43,7 +42,7 @@ public class LoginController {
 	@PostMapping("/login")
 	public String login(@ModelAttribute LoginDataDto loginData, HttpServletRequest request) {
 		
-		if(loginData==null)
+		if(loginData == null)
 			return "redirect:/";
 		
 		String userName = loginData.getUser();
@@ -63,6 +62,12 @@ public class LoginController {
 			return "redirect:/GestioneStabili/home";			
 		}
 		
+		return "redirect:/";
+	}
+
+	@GetMapping("/logout")
+	public String logout(HttpServletRequest request){
+		request.getSession().invalidate();
 		return "redirect:/";
 	}
 }

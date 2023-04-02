@@ -26,78 +26,89 @@ import jakarta.servlet.http.HttpServletRequest;
 @EnableWebMvc
 @RequestMapping("/GestioneStabili/admin/commonhold")
 public class CommonhaldController {
-	
+
 	@Autowired
 	CommonholdService service;
 	@Autowired
 	AdministratorService administratorService;
 	@Autowired
 	ModelMapper mapper;
-	
-	
+
 	@GetMapping("/list")
-	private String commonholdList(HttpServletRequest request,Model model) {
-		if(!ChecklLogin.checkAdminLog(request))
+	private String commonholdList(HttpServletRequest request, Model model) {
+		if (!ChecklLogin.checkAdminLog(request))
 			return "redirect:/";
-		
+
 		AdministratorDto admin = (AdministratorDto) request.getSession().getAttribute("admin");
-		
+
 		List<CommonholdDto> commonholds = service.findByAdministrator(admin);
-		
+
 		model.addAttribute("commonholds", commonholds);
-		
+
 		return "commonholdList";
 	}
-	
-	
-	@GetMapping("add")
-	private String add(HttpServletRequest request,Model model) {
-		if(!ChecklLogin.checkAdminLog(request))
+
+	@GetMapping("/add")
+	private String add(HttpServletRequest request, Model model) {
+		if (!ChecklLogin.checkAdminLog(request))
 			return "redirect:/";
 		model.addAttribute("commonhold", new Commonhold());
 		return "commonholdAdd";
 	}
-	
-	@PostMapping("insert")
-	private String insert(@ModelAttribute CommonholdDto commonhold,HttpServletRequest request) {
-		if(!ChecklLogin.checkAdminLog(request))
-			return "redirect:/";
-		
-		AdministratorDto admin = (AdministratorDto) request.getSession().getAttribute("admin");
-		
-		if(commonhold == null || !administratorService.insert(commonhold,admin)) {
-			return  "redirect:/GestioneStabili/admin/commonhold/add";			
-		}
-		
-		return "redirect:/GestioneStabili/admin/commonhold/list";
-	}
-	
-	@GetMapping("/update/{uniqueCode}")
-	public String update(@PathVariable String uniqueCode ,HttpServletRequest request) {
-		if(!ChecklLogin.checkAdminLog(request))
-			return "redirect:/";
-		
-		AdministratorDto admin = (AdministratorDto) request.getSession().getAttribute("admin");
-		
-		
-		service.update(admin,uniqueCode);
-		
-		return "redirect:/GestioneStabili/admin/commonhold/list";
-	}
-	
-	@GetMapping("/delete/{uniqueCode}")
-	public String delete(@PathVariable String uniqueCode ,HttpServletRequest request) {
-		if(!ChecklLogin.checkAdminLog(request))
-			return "redirect:/";
-		
-		AdministratorDto admin = (AdministratorDto) request.getSession().getAttribute("admin");
-		
-		
-		service.delete(admin,uniqueCode);
-			
-		return "redirect:/GestioneStabili/admin/commonhold/list";
-	}
-	
 
-	
+	@PostMapping("/insert")
+	private String insert(@ModelAttribute CommonholdDto commonhold, HttpServletRequest request) {
+		if (!ChecklLogin.checkAdminLog(request))
+			return "redirect:/";
+
+		AdministratorDto admin = (AdministratorDto) request.getSession().getAttribute("admin");
+
+		if (commonhold == null || !administratorService.insert(commonhold, admin)) {
+			return "redirect:/GestioneStabili/admin/commonhold/add";
+		}
+
+		AdministratorDto newAdmin = administratorService.findByUserName(admin.getUserName());
+		request.getSession().setAttribute("admin", newAdmin);
+		return "redirect:/GestioneStabili/admin/commonhold/list";
+	}
+
+	@GetMapping("/change/{uniqueCode}")
+	public String change(@PathVariable String uniqueCode, HttpServletRequest request, Model model) {
+		if (!ChecklLogin.checkAdminLog(request))
+			return "redirect:/";
+
+		CommonholdDto commonhold = service.findByUniqueCode(uniqueCode);
+
+		model.addAttribute("commonhold", commonhold);
+		return "commonholdUpdate";
+	}
+
+	@PostMapping("/update/{uniqueCode}")
+	public String update(@ModelAttribute CommonholdDto commonhold,@PathVariable String uniqueCode, HttpServletRequest request) {
+		if (!ChecklLogin.checkAdminLog(request))
+			return "redirect:/";
+
+
+		AdministratorDto admin = (AdministratorDto) request.getSession().getAttribute("admin");
+
+		service.update(admin, commonhold,uniqueCode);
+
+		AdministratorDto newAdmin = administratorService.findByUserName(admin.getUserName());
+		request.getSession().setAttribute("admin", newAdmin);
+		return "redirect:/GestioneStabili/admin/commonhold/list";
+	}
+
+	@GetMapping("/delete/{uniqueCode}")
+	public String delete(@PathVariable String uniqueCode, HttpServletRequest request) {
+		if (!ChecklLogin.checkAdminLog(request))
+			return "redirect:/";
+
+		AdministratorDto admin = (AdministratorDto) request.getSession().getAttribute("admin");
+
+		service.delete(admin, uniqueCode);
+		AdministratorDto newAdmin = administratorService.findByUserName(admin.getUserName());
+		request.getSession().setAttribute("admin", newAdmin);
+		return "redirect:/GestioneStabili/admin/commonhold/list";
+	}
+
 }

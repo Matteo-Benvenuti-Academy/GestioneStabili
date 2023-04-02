@@ -10,9 +10,7 @@
     <title>Gestore Condomini</title>
 </head>
 <body>
-    <div th:insert="navbar :: navbar"></div>
-	
-	 <!--  th:if="${inserimento}" -->
+	<div th:insert="~{adminNavbar :: adminNavbar}"></div>	
     <div class="container mt-3">
     
 	    <div class="row  d-flex flex-column justify-content-center align-items-center">
@@ -40,7 +38,7 @@
 								<i class="fa fa-search" style="color: #000000;"></i>
 								</a>
 								
-								<a class="btn btn-outline-warning text-primary"  th:href="@{/GestioneStabili/admin/commonhold/update/} + ${comm.uniqueCode}">
+								<a class="btn btn-outline-warning text-primary"  th:href="@{/GestioneStabili/admin/commonhold/change/} + ${comm.uniqueCode}">
 								<i class="fa fa-pencil" style="color: #000000;"></i>
 								</a>
 								
