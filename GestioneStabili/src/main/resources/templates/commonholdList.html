@@ -12,7 +12,10 @@
 <body>
 	<div th:insert="~{adminNavbar :: adminNavbar}"></div>	
     <div class="container mt-3">
-    
+		
+
+		<h2>Lista Condomini</h2>
+
 	    <div class="row  d-flex flex-column justify-content-center align-items-center">
 	    
 	    	<div class="col-12">
@@ -23,7 +26,12 @@
 							<th>Nome</th>
 							<th>Indirizzo</th>					
 							<th>Codice stabile</th>
-							<th></th>
+							<th>
+								<a class="btn btn-outline-primary text-primary"  
+								th:href="@{/GestioneStabili/admin/commonhold/add}">
+								Aggiungi
+								</a>
+							</th>
 						</tr>
 					</thead>
 					<tbody>
